@@ -63,7 +63,8 @@ namespace IBAN_validator
                 else if(Char.IsDigit(character))
                 {
                     stringBuilder.Append(character);
-                } else
+                }
+                else
                 {
                     return "invalid";
                 }
