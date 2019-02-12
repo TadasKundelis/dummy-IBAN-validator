@@ -60,7 +60,7 @@ namespace IBAN_validator
                     }
                     stringBuilder.Append(letterToNumber[character]);
                 }
-                else if(Char.IsDigit(character))
+                else if (Char.IsDigit(character))
                 {
                     stringBuilder.Append(character);
                 }
