@@ -10,65 +10,70 @@ namespace IBAN_validator
         static void Main(string[] args)
         {
             Console.WriteLine("This is IBAN validator");
-            App();
-        }
-
-        static void App()
-        {
-            
-            Console.WriteLine("\nType F To validate a file or S to validate a single code:");
-            string choice = Console.ReadLine();
-            if (choice.ToLower() == "f")
+            while (true)
             {
-                Console.WriteLine("Please enter the path to file location:");
-                string inputDirectory = Console.ReadLine();
-                Console.WriteLine("Please enter the file name:");
-                string inputFileName = Console.ReadLine();
-                string inputPath = $"{inputDirectory}\\{inputFileName}";
-                string outputFileName = null;
-                string outputPath = null;
-                try
+                Console.WriteLine("\nType F To validate a file or S to validate a single code:");
+                string choice = Console.ReadLine();
+                if (choice.ToLower() == "f")
                 {
-                    outputFileName = Path.GetFileNameWithoutExtension(inputPath);
-                    outputPath = $"{inputDirectory}\\{outputFileName}.out";
-
-                } catch(Exception exception)
-                {
-                    Console.WriteLine($"\n{exception.Message}");
-                }
-                
-                if (File.Exists(inputPath))
-                {
-                    using (StreamWriter fileWriter = new StreamWriter(outputPath))
+                    Console.WriteLine("Please enter the path to file location:");
+                    string inputDirectory = Console.ReadLine();
+                    Console.WriteLine("Please enter the file name:");
+                    string inputFileName = Console.ReadLine();
+                    string inputPath = $"{inputDirectory}\\{inputFileName}";
+                    string outputFileName = null;
+                    string outputPath = null;
+                    try
                     {
-                        using (StreamReader fileReader = new StreamReader(inputPath))
+                        outputFileName = Path.GetFileNameWithoutExtension(inputPath);
+                        outputPath = $"{inputDirectory}\\{outputFileName}.out";
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine($"\n{exception.Message}");
+                        continue;
+                    }
+
+                    if (Path.GetExtension(inputPath) != ".txt")
+                    {
+                        Console.WriteLine("\nWrong Format! Only .txt files are allowed.");
+                        continue;
+                    }
+
+                    if (File.Exists(inputPath))
+                    {
+                        using (StreamWriter fileWriter = new StreamWriter(outputPath))
                         {
-                            while (fileReader.Peek() != -1)
+                            using (StreamReader fileReader = new StreamReader(inputPath))
                             {
-                                string code = fileReader.ReadLine();
-                                string output = String.Format("{0};{1}", code, Validator.Run(code));
-                                fileWriter.WriteLine(output);
+                                while (fileReader.Peek() != -1)
+                                {
+                                    string code = fileReader.ReadLine();
+                                    string output = String.Format("{0};{1}", code, Validator.Run(code));
+                                    fileWriter.WriteLine(output);
+                                }
                             }
                         }
+                        Console.WriteLine($"\nDone, output was written to {outputPath}");
                     }
-                    Console.WriteLine($"\nDone, output was written to {outputPath}");
+                    else
+                    {
+                        Console.WriteLine("\nFile not found! Please try again.");
+                    }
+                }
+                else if (choice.ToLower() == "s")
+                {
+                    Console.WriteLine("Please enter the code:");
+                    string code = Console.ReadLine();
+                    Console.WriteLine("\n" + Validator.Run(code));
                 }
                 else
                 {
-                    Console.WriteLine("\nFile not found! Please try again.");
+                    Console.WriteLine("\nInvalid selection. Please try again.");
                 }
             }
-            else if (choice.ToLower() == "s")
-            {
-                Console.WriteLine("Please enter the code:");
-                string code = Console.ReadLine();
-                Console.WriteLine("\n" + Validator.Run(code));
-            }
-            else
-            {
-                Console.WriteLine("\nInvalid selection. Please try again.");
-            }
-            App();
         }
     }
 }
+
+        
