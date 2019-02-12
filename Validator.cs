@@ -11,7 +11,7 @@ namespace IBAN_validator
     {
         public static string Run(string code)
         {
-            if(code.Length < 4 || code.Length > 34)
+            if (code.Length < 4 || code.Length > 34)
             {
                 return "invalid";
             };
